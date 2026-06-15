@@ -20,6 +20,8 @@ dev = [
     "isort>=5.13.2",
     "mkdocs>=1.6.1",
     "mkdocstrings[python]>=1.0.4",
+    "mypy>=2.1.0",
+    "pre-commit>=4.6.0",
 ]
 
 
@@ -33,3 +35,31 @@ build-backend = "uv_build"
 
 [tool.uv]
 package = true
+
+[tool.black]
+line-length = 88
+exclude = '''
+/(
+      .eggs         
+    | .git          
+    | .hg
+    | .mypy_cache
+    | .tox
+    | .venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+virtual_env = ".venv"
+
+
+[flake8]
+max-line-length = 88

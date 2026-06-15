@@ -1,30 +1,33 @@
-import click
-import pandas as pd
-import numpy as np
 from pathlib import Path
+
+import click
+import numpy as np
+import pandas as pd
+
 from cancer_prediction_rm2138.cancer_model import CancerModel
+
 
 @click.group()
 def cli():
     """Cancer prediction model CLI tool."""
     pass
 
+
 @cli.command()
 @click.option(
-    '--data-file',
-    '-d',
+    "--data-file",
+    "-d",
     type=click.Path(exists=True),
     required=True,
-    help='Path to the CSV file containing training data'
+    help="Path to the CSV file containing training data",
 )
 @click.option(
-    '--output-model',
-    '-o',
+    "--output-model",
+    "-o",
     type=click.Path(),
-    default='cancer_model.pkl',
-    help='Path to save the trained model (default: cancer_model.pkl)'
+    default="cancer_model.pkl",
+    help="Path to save the trained model (default: cancer_model.pkl)",
 )
-
 def train(data_file, output_model):
     """Train a cancer diagnosis prediction model from a CSV file.
 
@@ -42,11 +45,10 @@ def train(data_file, output_model):
         raise click.Abort()
 
     # Split features and target
-    X = df.drop(columns=['target'])
-    y = df['target']
+    X = df.drop(columns=["target"])
+    y = df["target"]
 
     click.echo(f"Features: {X.shape[1]} columns")
-
 
     X_train, y_train = X, y
 
@@ -77,24 +79,24 @@ def train(data_file, output_model):
 
 @cli.command()
 @click.option(
-    '--model-file',
-    '-m',
+    "--model-file",
+    "-m",
     type=click.Path(exists=True),
     required=True,
-    help='Path to the trained model file'
+    help="Path to the trained model file",
 )
 @click.option(
-    '--test-file',
-    '-t',
+    "--test-file",
+    "-t",
     type=click.Path(exists=True),
     required=True,
-    help='Path to the CSV file containing test data'
+    help="Path to the CSV file containing test data",
 )
 @click.option(
-    '--show-predictions',
-    '-p',
+    "--show-predictions",
+    "-p",
     is_flag=True,
-    help='Show individual predictions for each sample'
+    help="Show individual predictions for each sample",
 )
 def test(model_file, test_file, show_predictions):
     """Test a trained model on new data.
@@ -125,8 +127,8 @@ def test(model_file, test_file, show_predictions):
         raise click.Abort()
 
     # Split features and target
-    X_test = df.drop(columns=['target'])
-    y_test = df['target']
+    X_test = df.drop(columns=["target"])
+    y_test = df["target"]
 
     # Calculate accuracy
     click.echo("\nEvaluating model...")
@@ -153,12 +155,13 @@ def test(model_file, test_file, show_predictions):
 
         # Summary statistics
         correct_count = sum(
-            1 for i, (diagnosis, _) in enumerate(predictions)
+            1
+            for i, (diagnosis, _) in enumerate(predictions)
             if diagnosis == model.target_to_diagnosis(y_test.iloc[i])
         )
         click.echo("-" * 50)
         click.echo(f"Correct predictions: {correct_count}/{len(predictions)}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cli()
