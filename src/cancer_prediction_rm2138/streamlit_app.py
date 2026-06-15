@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-from cancer_prediction.cancer_model import CancerModel
+from cancer_prediction_rm2138.cancer_model import CancerModel
 
 st.set_page_config(page_title='Cancer Diagnosis Prediction', layout='wide')
 
@@ -21,7 +21,10 @@ def load_model(path='cancer_model.pkl'):
     model.load(path)
     return model
 
-def train_and_save_model(train_data, filename='cancer_model.pkl'):
+def train_and_save_model(train_data: pd.DataFrame, filename: str = 'cancer_model.pkl') -> CancerModel:
+    """
+    Train a CancerModel on the given training data and save it to a file.
+    """     
     model = CancerModel()
     filename = os.path.join(MODELS_DIR, filename)
     X = train_data.drop('target', axis=1)
