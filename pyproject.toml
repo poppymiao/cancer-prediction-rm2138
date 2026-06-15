@@ -19,3 +19,15 @@ dev = [
     "flake8>=5.0.4",
     "isort>=5.13.2",
 ]
+
+
+[project.scripts]
+cancer-prediction = "cancer_prediction_rm2138.scripts.app:cli"
+train = "cancer_prediction_rm2138.scripts.app:train"
+
+[build-system]
+requires = ["uv_build>=0.9.5,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.uv]
+package = true
